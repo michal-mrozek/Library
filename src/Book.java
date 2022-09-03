@@ -19,6 +19,12 @@ public class Book {
         this.pages = pages;
         this.publisher = publisher;
     }
+
+    void printInfo(){
+        String info = title + "; " + author + "; " + releaseDate + "; "
+                + pages + "; " + publisher + "; " + isbn;
+        System.out.println(info);
+    }
 }
 
 
