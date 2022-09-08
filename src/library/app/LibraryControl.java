@@ -6,10 +6,9 @@ import library.model.Library;
 
 public class LibraryControl {
 
-    private final int exit = 0;
-    private final int addBook = 1;
-    private final int printBook = 2;
-
+    private static final int EXIT = 0;
+    private static final int ADD_BOOK = 1;
+    private static final int PRINT_BOOKS = 2;
     private DataReader dataReader = new DataReader();
     private Library library = new Library();
 
@@ -19,19 +18,19 @@ public class LibraryControl {
             printOptions();
             option= dataReader.getInt();
             switch (option){
-                case addBook:
+                case ADD_BOOK:
                     addBook();
                     break;
-                case printBook:
+                case PRINT_BOOKS:
                     printBook();
                     break;
-                case exit:
+                case EXIT:
                     exit();
                     break;
                 default:
                     System.out.println("Choose correct option.");
             }
-        }while (option !=exit);
+        }while (option != EXIT);
     }
 
     private void exit() {
@@ -50,9 +49,9 @@ public class LibraryControl {
 
     private void printOptions() {
         System.out.println("Choose option:");
-        System.out.println("0 - exit");
-        System.out.println("1 - add new book");
-        System.out.println("2 - print all books");
+        System.out.println(EXIT + " - exit");
+        System.out.println(ADD_BOOK + " - add new book");
+        System.out.println(PRINT_BOOKS + " - print all books");
     }
 
 
