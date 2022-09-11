@@ -8,14 +8,12 @@ public class Book extends Publication {
     private String isbn;
 
 
-
     public Book(String title, String author, int year, int pages, String publisher, String isbn) {
-        super(title,publisher,year);
+        super(title, publisher, year);
         this.author = author;
         this.pages = pages;
         this.isbn = isbn;
     }
-
 
 
     public String getAuthor() {
@@ -36,7 +34,6 @@ public class Book extends Publication {
     }
 
 
-
     public String getIsbn() {
         return isbn;
     }
@@ -45,10 +42,11 @@ public class Book extends Publication {
         this.isbn = isbn;
     }
 
-   public void printInfo(){
+    @Override
+    public void printInfo() {
         String info = getTitle() + "; " + author + "; " + getYear() + "; "
                 + pages + "; " + getPublisher();
-        if (isbn != null){
+        if (isbn != null) {
             info = info + "; " + isbn;
         }
 
