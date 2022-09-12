@@ -3,8 +3,8 @@ package library.model;
 public class Library {
 
     private static final int MAX_PUBLICATIONS = 2000;
-    private Publication[] publications = new Book[MAX_PUBLICATIONS];
-    private int publicationsNumber = 0;
+    private Publication[] publications = new Publication[MAX_PUBLICATIONS];
+    private int publicationsNumber;
 
     public void addBook(Book book){
         if (publicationsNumber < MAX_PUBLICATIONS){
