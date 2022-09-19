@@ -1,8 +1,9 @@
 package library.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public  class Publication {
+public abstract class Publication implements Serializable {
     private int year;
     private String title;
     private String publisher;
@@ -42,6 +43,7 @@ public  class Publication {
         return title + "; " + publisher + "; " +year;
     }
 
+    public abstract String toCsv();
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,8 +1,13 @@
 package library.app;
 
+import library.exeption.ExportDataException;
+import library.exeption.ImportDataException;
+import library.exeption.InvalidDataException;
 import library.exeption.NoSuchOptionException;
 import library.io.ConsolePrinter;
 import library.io.DataReader;
+import library.io.file.FileManager;
+import library.io.file.FileManagerBuilder;
 import library.model.Book;
 import library.model.Library;
 import library.model.Magazine;
@@ -14,9 +19,22 @@ public class LibraryControl {
 
 private ConsolePrinter printer = new ConsolePrinter();
     private DataReader dataReader = new DataReader(printer);
-    private Library library = new Library();
+    private Library library;
+    private FileManager fileManager;
 
-    public void controlLoop() {
+    LibraryControl() {
+        fileManager = new FileManagerBuilder(printer, dataReader).build();
+        try {
+            library = fileManager.importData();
+            printer.printLine("Import success");
+        } catch (ImportDataException | InvalidDataException e){
+            printer.printLine(e.getMessage());
+            printer.printLine("New database initialised");
+            library = new Library();
+        }
+    }
+
+    void controlLoop() {
         Option option;
         do {
             printOptions();
@@ -68,6 +86,12 @@ printer.printLine(e.getMessage());
 
 
     private void exit() {
+        try {
+            fileManager.exportData(library);
+            printer.printLine("Export success");
+        } catch (ExportDataException e){
+            printer.printLine(e.getMessage());
+        }
         printer.printLine("Program finished");
         dataReader.close();
     }
@@ -80,7 +104,7 @@ printer.printLine(e.getMessage());
     private void addBook() {
         try {
             Book book = dataReader.readAndCreateBook();
-            library.addBook(book);
+            library.addPublication(book);
         } catch(InputMismatchException e){
             printer.printLine("Cannot create book, wrong input.");
         } catch (ArrayIndexOutOfBoundsException e){
@@ -91,7 +115,7 @@ printer.printLine(e.getMessage());
     private void addMagazine() {
         try {
             Magazine magazine = dataReader.readAndCreateMagazine();
-            library.addMagazine(magazine);
+            library.addPublication(magazine);
         }catch(InputMismatchException e){
             printer.printLine("Cannot create magazine, wrong input.");
         } catch (ArrayIndexOutOfBoundsException e){
@@ -105,5 +129,40 @@ printer.printLine(e.getMessage());
         }
     }
 
+    private enum Option {
+        EXIT(0, "exit"),
+        ADD_BOOK(1, "add book"),
+        ADD_MAGAZINE(2, "add magazine"),
+        PRINT_BOOKS(3, "print all books"),
+        PRINT_MAGAZINES(4, "print all magazines");
 
+        private final int value;
+        private final String description;
+
+        Option(int value, String description) {
+            this.value = value;
+            this.description = description;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        @Override
+        public String toString() {
+            return value + " - " + description;
+        }
+
+        static Option createFromInt(int option) {
+            try {
+                return Option.values()[option];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new NoSuchOptionException("No option " + option);
+            }
+        }
+    }
 }
