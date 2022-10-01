@@ -12,12 +12,15 @@ import library.model.Book;
 import library.model.Library;
 import library.model.Magazine;
 import library.model.Publication;
+import library.model.comparator.AlphabeticComparator;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.Objects;
 
 public class LibraryControl {
 
-private ConsolePrinter printer = new ConsolePrinter();
+    private ConsolePrinter printer = new ConsolePrinter();
     private DataReader dataReader = new DataReader(printer);
     private Library library;
     private FileManager fileManager;
@@ -27,7 +30,7 @@ private ConsolePrinter printer = new ConsolePrinter();
         try {
             library = fileManager.importData();
             printer.printLine("Import success");
-        } catch (ImportDataException | InvalidDataException e){
+        } catch (ImportDataException | InvalidDataException e) {
             printer.printLine(e.getMessage());
             printer.printLine("New database initialised");
             library = new Library();
@@ -56,11 +59,43 @@ private ConsolePrinter printer = new ConsolePrinter();
                     printMagazines();
                     break;
 
+                case DELETE_BOOK:
+                    deleteBook();
+                    break;
+                case DELETE_MAGAZINE:
+                    deleteMagazine();
+                    break;
                 default:
                     printer.printLine("Choose correct option.");
             }
         } while (option != Option.EXIT);
     }
+
+    private void deleteMagazine() {
+        try {
+            Magazine magazine = dataReader.readAndCreateMagazine();
+            if (library.removePublication(magazine))
+                printer.printLine("Magazine deleted");
+            else
+                printer.printLine("Cannot find magazine to delete.");
+        } catch (InputMismatchException e){
+            printer.printLine("Cannot create magazine, wrong input");
+        }
+    }
+
+    private void deleteBook() {
+        try {
+            Book book = dataReader.readAndCreateBook();
+            if (library.removePublication(book))
+                printer.printLine("Book deleted");
+            else
+                printer.printLine("Cannot find book to delete.");
+        } catch (InputMismatchException e){
+            printer.printLine("Cannot create book, wrong input");
+        }
+    }
+
+
 
     private Option getOption() {
         boolean optionOk = false;
@@ -70,7 +105,7 @@ private ConsolePrinter printer = new ConsolePrinter();
                 option = Option.createFromInt(dataReader.getInt());
                 optionOk = true;
             } catch (NoSuchOptionException e) {
-printer.printLine(e.getMessage());
+                printer.printLine(e.getMessage());
             } catch (InputMismatchException e) {
                 printer.printLine("Wrong input!");
             }
@@ -79,17 +114,16 @@ printer.printLine(e.getMessage());
     }
 
     private void printMagazines() {
-        Publication[] publications = library.getPublications();
+        Publication[] publications = getSortedPublications();
         printer.printMagazines(publications);
     }
-
 
 
     private void exit() {
         try {
             fileManager.exportData(library);
             printer.printLine("Export success");
-        } catch (ExportDataException e){
+        } catch (ExportDataException e) {
             printer.printLine(e.getMessage());
         }
         printer.printLine("Program finished");
@@ -97,17 +131,24 @@ printer.printLine(e.getMessage());
     }
 
     private void printBooks() {
-        Publication[] publications = library.getPublications();
+        Publication[] publications = getSortedPublications();
         printer.printBooks(publications);
+
+    }
+
+    private Publication[] getSortedPublications() {
+        Publication[] publications = library.getPublications();
+        Arrays.sort(publications, new AlphabeticComparator());
+        return publications;
     }
 
     private void addBook() {
         try {
             Book book = dataReader.readAndCreateBook();
             library.addPublication(book);
-        } catch(InputMismatchException e){
+        } catch (InputMismatchException e) {
             printer.printLine("Cannot create book, wrong input.");
-        } catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             printer.printLine("Cannot add more books");
         }
     }
@@ -116,12 +157,13 @@ printer.printLine(e.getMessage());
         try {
             Magazine magazine = dataReader.readAndCreateMagazine();
             library.addPublication(magazine);
-        }catch(InputMismatchException e){
+        } catch (InputMismatchException e) {
             printer.printLine("Cannot create magazine, wrong input.");
-        } catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             printer.printLine("Cannot add more magazines");
         }
     }
+
     private void printOptions() {
         printer.printLine("Choose option:");
         for (Option option : Option.values()) {
@@ -134,7 +176,9 @@ printer.printLine(e.getMessage());
         ADD_BOOK(1, "add book"),
         ADD_MAGAZINE(2, "add magazine"),
         PRINT_BOOKS(3, "print all books"),
-        PRINT_MAGAZINES(4, "print all magazines");
+        PRINT_MAGAZINES(4, "print all magazines"),
+        DELETE_BOOK(5, "delete book"),
+        DELETE_MAGAZINE(6, "delete magazine");
 
         private final int value;
         private final String description;
