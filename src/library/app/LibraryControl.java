@@ -6,8 +6,10 @@ import library.io.DataReader;
 import library.io.file.FileManager;
 import library.io.file.FileManagerBuilder;
 import library.model.*;
+import library.model.comparator.AlphabeticComparator;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -70,7 +72,12 @@ public class LibraryControl {
     }
 
     private void printUsers() {
-        printer.printUsers(library.getUsers().values());
+        printer.printUsers(library.getSortedUsers(new Comparator<LibraryUser>() {
+            @Override
+            public int compare(LibraryUser l1, LibraryUser l2) {
+                return l1.getLastName().compareToIgnoreCase(l2.getLastName());
+            }
+        }));
     }
 
     private void addUser() {
@@ -124,7 +131,7 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-        Collection<Publication> publications = library.getPublications().values();
+        Collection<Publication> publications = library.getSortedPublication(new AlphabeticComparator());
         printer.printMagazines(publications);
     }
 
@@ -141,7 +148,7 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-        Collection<Publication> publications = library.getPublications().values();
+        Collection<Publication> publications = library.getSortedPublication(new AlphabeticComparator());
         printer.printBooks(publications);
 
     }
