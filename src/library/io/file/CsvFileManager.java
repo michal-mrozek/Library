@@ -7,7 +7,6 @@ import library.model.*;
 
 import java.io.*;
 import java.util.Collection;
-import java.util.Scanner;
 
 public class CsvFileManager implements FileManager {
     private static final String FILE_NAME = "Library.csv";
@@ -25,14 +24,12 @@ public class CsvFileManager implements FileManager {
 
     private void importUsers(Library library) {
         try (
-                Scanner fileReader = new Scanner(new File(USERS_FILE_NAME));
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(USERS_FILE_NAME))
         ) {
-            while (fileReader.hasNextLine()) {
-                String line = fileReader.nextLine();
-                LibraryUser libraryUser = createUserFromString(line);
-                library.addUser(libraryUser);
-            }
-        } catch (FileNotFoundException e) {
+            bufferedReader.lines()
+                    .map(this::createUserFromString)
+                    .forEach(library::addUser);
+        } catch (IOException e) {
             throw new ImportDataException("Import error");
         }
     }
@@ -48,14 +45,12 @@ public class CsvFileManager implements FileManager {
 
     private void importPublications(Library library) {
         try (
-                Scanner fileReader = new Scanner(new File(FILE_NAME));
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))
         ) {
-            while (fileReader.hasNextLine()) {
-                String line = fileReader.nextLine();
-                Publication publication = createObjectFromString(line);
-                library.addPublication(publication);
-            }
-        } catch (FileNotFoundException e) {
+            bufferedReader.lines()
+                    .map(this::createObjectFromString)
+                    .forEach(library::addPublication);
+        } catch (IOException e) {
             throw new ImportDataException("Import error");
         }
     }
