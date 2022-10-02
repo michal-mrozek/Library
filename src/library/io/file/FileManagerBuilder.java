@@ -4,8 +4,6 @@ import library.exeption.NoSuchFileTypeException;
 import library.io.ConsolePrinter;
 import library.io.DataReader;
 
-import java.io.File;
-
 public class FileManagerBuilder {
     private ConsolePrinter printer;
     private DataReader reader;
@@ -15,10 +13,10 @@ public class FileManagerBuilder {
         this.reader = reader;
     }
 
-    public FileManager build(){
+    public FileManager build() {
         printer.printLine("Choice data type:");
         FileType fileType = getFileType();
-        switch (fileType){
+        switch (fileType) {
 
             case SERIAL:
                 return new SerializableFileManager();
@@ -35,13 +33,13 @@ public class FileManagerBuilder {
         do {
             printTypes();
             String type = reader.getString().toUpperCase();
-            try{
+            try {
                 result = FileType.valueOf(type);
                 typeOk = true;
             } catch (IllegalArgumentException e) {
                 printer.printLine("Wrong input, try again");
             }
-        }while (!typeOk);
+        } while (!typeOk);
         return result;
     }
 

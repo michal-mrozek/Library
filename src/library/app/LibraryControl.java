@@ -85,7 +85,7 @@ public class LibraryControl {
 
     private void printUsers() {
         printer.printUsers(library.getSortedUsers(
-                Comparator.comparing(User::getLastName,String.CASE_INSENSITIVE_ORDER)));
+                Comparator.comparing(User::getLastName, String.CASE_INSENSITIVE_ORDER)));
     }
 
     private void addUser() {
@@ -140,7 +140,7 @@ public class LibraryControl {
 
     private void printMagazines() {
         Collection<Publication> publications = library.getSortedPublication(
-                Comparator.comparing(Publication::getTitle,String.CASE_INSENSITIVE_ORDER)
+                Comparator.comparing(Publication::getTitle, String.CASE_INSENSITIVE_ORDER)
         );
         printer.printMagazines(publications);
     }
@@ -159,12 +159,11 @@ public class LibraryControl {
 
     private void printBooks() {
         Collection<Publication> publications = library.getSortedPublication(
-                Comparator.comparing(Publication::getTitle,String.CASE_INSENSITIVE_ORDER)
+                Comparator.comparing(Publication::getTitle, String.CASE_INSENSITIVE_ORDER)
         );
         printer.printBooks(publications);
 
     }
-
 
 
     private void addBook() {
@@ -206,7 +205,7 @@ public class LibraryControl {
         DELETE_MAGAZINE(6, "delete magazine"),
         ADD_USER(7, "add user"),
         PRINT_USERS(8, "print users"),
-        FIND_PUBLICATION(9,"find publication");
+        FIND_PUBLICATION(9, "find publication");
 
         private final int value;
         private final String description;

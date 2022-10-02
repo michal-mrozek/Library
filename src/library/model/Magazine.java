@@ -4,7 +4,7 @@ import java.time.MonthDay;
 import java.util.Objects;
 
 public class Magazine extends Publication {
-public static final String TYPE = "Magazine";
+    public static final String TYPE = "Magazine";
 
     private MonthDay monthDay;
     private String language;
@@ -12,7 +12,7 @@ public static final String TYPE = "Magazine";
     public Magazine(String title, String publisher, String language, int year, int month, int day) {
         super(title, publisher, year);
         this.language = language;
-        this.monthDay = MonthDay.of(month,day);
+        this.monthDay = MonthDay.of(month, day);
 
 
     }

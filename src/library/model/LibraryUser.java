@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class LibraryUser extends User{
+public class LibraryUser extends User {
     private List<Publication> publicationHistory = new ArrayList<>();
     private List<Publication> borrowedPublications = new ArrayList<>();
 
@@ -20,15 +20,17 @@ public class LibraryUser extends User{
         return borrowedPublications;
     }
 
-    public void addPublicationToHistory(Publication pub){
+    public void addPublicationToHistory(Publication pub) {
         publicationHistory.add(pub);
     }
-    public void borrowPublication(Publication pub){
+
+    public void borrowPublication(Publication pub) {
         borrowedPublications.add(pub);
     }
-    public boolean returnPublication(Publication pub){
+
+    public boolean returnPublication(Publication pub) {
         boolean result = false;
-        if (borrowedPublications.contains(pub)){
+        if (borrowedPublications.contains(pub)) {
             borrowedPublications.remove(pub);
             addPublicationToHistory(pub);
             result = true;
@@ -48,7 +50,7 @@ public class LibraryUser extends User{
 
     @Override
     public String toCsv() {
-        return getFirstName()+ ";" + getLastName() + ";" + getNin();
+        return getFirstName() + ";" + getLastName() + ";" + getNin();
     }
 
     @Override

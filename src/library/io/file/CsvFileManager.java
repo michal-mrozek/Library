@@ -39,7 +39,7 @@ public class CsvFileManager implements FileManager {
         String firstName = split[0];
         String lastName = split[1];
         String nin = split[2];
-        return new LibraryUser(firstName,lastName,nin);
+        return new LibraryUser(firstName, lastName, nin);
 
     }
 
@@ -103,7 +103,7 @@ public class CsvFileManager implements FileManager {
 
     private void exportPublications(Library library) {
         Collection<Publication> publications = library.getPublications().values();
-        exportToCsv(publications,FILE_NAME);
+        exportToCsv(publications, FILE_NAME);
     }
 
 
