@@ -64,10 +64,23 @@ public class LibraryControl {
                 case PRINT_USERS:
                     printUsers();
                     break;
+                case FIND_PUBLICATION:
+                    findPublication();
+                    break;
                 default:
                     printer.printLine("Choose correct option.");
             }
         } while (option != Option.EXIT);
+    }
+
+    private void findPublication() {
+        printer.printLine("Search title:");
+        String title = dataReader.getString();
+        String titleNoFound = "Title not found.";
+        library.findPublicationByTitle(title)
+                .map(Publication::toString)
+                .ifPresentOrElse(System.out::println, () -> System.out.println(titleNoFound));
+
     }
 
     private void printUsers() {
@@ -192,7 +205,8 @@ public class LibraryControl {
         DELETE_BOOK(5, "delete book"),
         DELETE_MAGAZINE(6, "delete magazine"),
         ADD_USER(7, "add user"),
-        PRINT_USERS(8, "print users");
+        PRINT_USERS(8, "print users"),
+        FIND_PUBLICATION(9,"find publication");
 
         private final int value;
         private final String description;
