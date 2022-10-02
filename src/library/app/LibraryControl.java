@@ -8,6 +8,7 @@ import library.io.file.FileManagerBuilder;
 import library.model.*;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -71,7 +72,7 @@ public class LibraryControl {
 
     private void printUsers() {
         printer.printUsers(library.getSortedUsers(
-                (l1, l2) -> l1.getLastName().compareToIgnoreCase(l2.getLastName())));
+                Comparator.comparing(User::getLastName,String.CASE_INSENSITIVE_ORDER)));
     }
 
     private void addUser() {
@@ -126,7 +127,7 @@ public class LibraryControl {
 
     private void printMagazines() {
         Collection<Publication> publications = library.getSortedPublication(
-                (p1,p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle())
+                Comparator.comparing(Publication::getTitle,String.CASE_INSENSITIVE_ORDER)
         );
         printer.printMagazines(publications);
     }
@@ -145,7 +146,7 @@ public class LibraryControl {
 
     private void printBooks() {
         Collection<Publication> publications = library.getSortedPublication(
-                (p1,p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle())
+                Comparator.comparing(Publication::getTitle,String.CASE_INSENSITIVE_ORDER)
         );
         printer.printBooks(publications);
 
